@@ -474,7 +474,7 @@ function dataBak($table)
     $sql .= $create[1] . ";\n\n";
     $rows = $m->query("SELECT * FROM $table");
     $numfields = $m->num_fields($rows);
-    $numrows = $m->num_rows($rows);
+    // $numrows = $m->num_rows($rows);
     while ($row = $m->fetch_row($rows)) {
         $comma = '';
         $sql .= "INSERT INTO `$table` VALUES(";

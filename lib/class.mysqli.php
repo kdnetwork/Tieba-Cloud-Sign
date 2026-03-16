@@ -262,4 +262,12 @@ class wmysql
     {
         return $this->conn->real_escape_string($sql);
     }
+
+    /**
+     * 查看数据库类型
+     */
+    public function db_type()
+    {
+        return "mysql";
+    }
 }

@@ -46,7 +46,7 @@ class cron
 
         $set = adds($set);
 
-        $sql = "INSERT INTO  `" . DB_PREFIX . "cron` (`name`";
+        $sql = ($m->db_type() === 'sqlite' ? 'INSERT OR REPLACE' : 'INSERT') . " INTO  `" . DB_PREFIX . "cron` (`name`";
         $a = '';
         $b = "'{$name}'";
         $c = "`name` = '{$name}'";
@@ -87,7 +87,11 @@ class cron
             $c .= ", `log` = '{$set['log']}'";
         }
 
-        $sql .= $a . ' ) VALUES (' . $b . ') ON DUPLICATE KEY UPDATE ' . $c . ';';
+        if ($m->db_type() === 'sqlite') {
+            $sql .= $a . ' ) VALUES (' . $b . ');';
+        } else {
+            $sql .= $a . ' ) VALUES (' . $b . ') ON DUPLICATE KEY UPDATE ' . $c . ';';
+        };
         $m->query($sql);
     }
 
@@ -143,7 +147,7 @@ class cron
 
         $set = adds($set);
 
-        $sql = "INSERT IGNORE INTO  `" . DB_PREFIX . "cron` (`name`";
+        $sql = "INSERT " . ($m->db_type() === 'sqlite' ? 'OR IGNORE' : 'IGNORE') . " INTO  `" . DB_PREFIX . "cron` (`name`";
         $a = '';
         $b = "'{$name}'";
 

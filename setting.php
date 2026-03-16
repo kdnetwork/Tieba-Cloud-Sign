@@ -559,7 +559,7 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
                 $v = addslashes(htmlspecialchars($_POST['add']));
                 $pid = (int) strip_tags($_POST['pid']);
                 $osq = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . TABLE . "` WHERE `uid` = " . UID . " AND `tieba` = '{$v}';");
-                if ($m->num_rows($osq) == 0) {
+                if (!$m->fetch_row($osq)) {
                     $table = $m->fetch_array($m->query('select * from `' . DB_NAME . '`.`' . DB_PREFIX . 'users` where `id` = ' . UID));
                     $tb_max = $m->fetch_row($m->query("SELECT COUNT(*) FROM `" . DB_NAME . "`.`" . DB_PREFIX . $table['t'] . "` where `uid` = " . UID));
                     if (ROLE == 'admin' || ROLE == 'vip') {

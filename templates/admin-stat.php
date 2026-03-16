@@ -43,8 +43,9 @@ switch ($i['mode'][2]) {
                 $uxsc = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `" . DB_PREFIX . "baiduid` WHERE `uid` = " . $uxs['id']);
                 $list = $m->query("SELECT id,no,status,latest FROM `" . DB_PREFIX . $uxs['t'] . "` WHERE `uid` = " . $uxs['id']);
                 $success = $error = $no = $all = $waiting = 0;
-                $num = $m->num_rows($list);
+                $num = 0;
                 while ($x = $m->fetch_array($list)) {
+                    $num++;
                     if ($x['no'] == '1') {
                         $no++;
                     } elseif ($x['latest'] != $day) {
@@ -55,7 +56,7 @@ switch ($i['mode'][2]) {
                         $error++;
                     }
                 }
-                    $allw = $allw + $waiting;
+                $allw = $allw + $waiting;
                 $alls = $alls + $success;
                 $alln = $alln + $no;
                 $allm = $allm + $num;

@@ -50,7 +50,10 @@ class option
         }
         $name = sqladds($name);
         $value = sqladds($value);
-        if ($m->query("INSERT INTO `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';")) {
+        $sql = $m->db_type() === 'sqlite' 
+            ? "INSERT OR REPLACE INTO `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}','{$value}');"
+            : "INSERT INTO `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}'.;";
+        if ($m->query($sql)) {
             $i['opt'][$name] = $value;
             return true;
         } else {
@@ -69,7 +72,10 @@ class option
         global $m,$i;
         $name = sqladds($name);
         $value = sqladds($value);
-        if ($m->query("INSERT IGNORE INTO  `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}', '{$value}');")) {
+        $sql = $m->db_type() === 'sqlite'
+            ? "INSERT OR IGNORE INTO  `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}', '{$value}');"
+            : "INSERT IGNORE INTO  `" . DB_PREFIX . "options` (`name`, `value`) VALUES ('{$name}', '{$value}');";
+        if ($m->query($sql)) {
             $i['opt'][$name] = $value;
             return true;
         } else {

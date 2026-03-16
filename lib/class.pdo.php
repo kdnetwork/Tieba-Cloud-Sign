@@ -180,7 +180,7 @@ class wmysql
     }
 
     /**
-     * 取得行的数目
+     * [弃用] 取得行的数目，pdo 应使用 COUNT(*) 或直接查询
      *
      */
     public function num_rows(PDOStatement $query)
@@ -269,5 +269,13 @@ class wmysql
     public function escape_string($sql)
     {
         return $this->conn->quote($sql);
+    }
+
+    /**
+     * 查看数据库类型
+     */
+    public function db_type()
+    {
+        return $this->conn->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 }

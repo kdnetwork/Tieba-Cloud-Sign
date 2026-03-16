@@ -34,14 +34,14 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
     $uid = isset($_COOKIE['uid']) ? sqladds($_COOKIE['uid']) : '';
     $pw = isset($_COOKIE['pwd']) ? sqladds($_COOKIE['pwd']) : '';
     $osq = $m->query("SELECT * FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users` WHERE `id` = '{$uid}' LIMIT 1");
-    if ($m->num_rows($osq) == 0) {
+    $p = $m->fetch_array($osq);
+    if (!$p) {
         setcookie("uid", '', time() - 3600);
         setcookie("pwd", '', time() - 3600);
         ReDirect("index.php?mod=login&error_msg=" . urlencode('Cookies 所记录的账号信息不正确，请重新登录(#1)') . "");
         die;
     }
     doAction('globals_1');
-    $p = $m->fetch_array($osq);
     if ($pw != substr(sha1(EncodePwd($p['pw'])), 4, 32)) {
         setcookie("uid", '', time() - 3600);
         setcookie("pwd", '', time() - 3600);
@@ -130,11 +130,11 @@ if (SYSTEM_PAGE == 'admin:login') {
             die;
     }
     $osq = $m->query("SELECT * FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users` WHERE `name` = '{$name}' OR `email` = '{$name}' LIMIT 1");
-    if ($m->num_rows($osq) == 0) {
+    $p = $m->fetch_array($osq);
+    if (!$p) {
         ReDirect("index.php?mod=login&error_msg=" . urlencode('账户不存在 [ 提示：账户不是昵称，账户可为用户名或者邮箱地址 ]'));
             die;
     }
-    $p = $m->fetch_array($osq);
     if (EncodePwd($pw) != $p['pw']) {
         ReDirect("index.php?mod=login&error_msg=" . urlencode('密码错误'));
         die;

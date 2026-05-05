@@ -45,7 +45,7 @@ doAction('admin_update_1');
 <?php
 //检测服务器是否支持写入
 if (is_writable("setup")) {
-    echo '<div id="comsys2">
+    ?><div id="comsys2">
 	<div class="alert alert-info"><span id="upd_info">正在检查更新......</span><br/><br/>
 	<div class="progress progress-striped active">
 	<div class="progress-bar progress-bar-success" id="upd_prog" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
@@ -56,8 +56,7 @@ if (is_writable("setup")) {
 <div id="comsys2"></div>
 <div id="comsys3"></div>
 <div id="comsys4">
-  <form action="ajax.php" method="get">
-    <input type="hidden" name="mod" value="admin:update:updnow">
+  <form action="ajax.php?mod=admin:update:updnow" method="post">
     <div class="input-group">
       <span class="input-group-addon">输入 commit id</span>
       <input type="text" class="form-control" name="commit" id="commit_input">
@@ -76,8 +75,8 @@ if (is_writable("setup")) {
 	  4.输入框可填写commit id，提交后将下载任意未删除的commit的文件。<span class="text-danger">注意：来自非官方仓库的 commit (包括 pull requests 中的提交) 的安全性并不可靠，请不要在生产环境下使用此类方式更新。</span>
     </div>
   </div>
-</div>';
-    $writable = "1";
+</div>
+  <?php $writable = "1";
 } else {
     echo '<div class="alert alert-danger" role="alert">你的服务器不支持文件写入，请手动更新</div>';
     $writable = "0";

@@ -123,18 +123,24 @@ switch (SYSTEM_PAGE) {
         if (!file_exists(UPDATE_CACHE)) {
             mkdir(UPDATE_CACHE, 0777, true);
         }
-        $commit_mode = isset($_GET["commit"]) && $_GET["commit"];
+        $commit_mode = isset($_POST["commit"]) && $_POST["commit"];
+        $floderName = UPDATE_FNAME_GITHUB;
         //下载zip包
         //switch (option::get('update_server')){
         //  //OSCGIT禁止了直接下载
         //  //CODING仓库都没了
         //  default:
         if ($commit_mode) {
-            $c = new wcurl("https://github.com/MoeNetwork/Tieba-Cloud-Sign/archive/{$_GET["commit"]}.zip");
+            $commit_id = strtolower(trim($_POST["commit"]));
+            if (preg_match('/^[0-9a-f]{40}$/i', $commit_id) !== 1) {
+                DeleteFile(UPDATE_CACHE);
+                msg('错误 - 更新失败：<br/><br/>无效的 commit id');
+            }
+            $c = new wcurl("https://github.com/MoeNetwork/Tieba-Cloud-Sign/archive/{$commit_id}.zip");
+            $floderName = 'Tieba-Cloud-Sign-' . $commit_id;
         } else {
             $c = new wcurl(UPDATE_SERVER_GITHUB);
         }
-        $floderName = $commit_mode ? 'Tieba-Cloud-Sign-' . $_GET["commit"] : UPDATE_FNAME_GITHUB;
         //      break;
         //}
         $file = $c->exec();
